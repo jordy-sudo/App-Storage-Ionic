@@ -1,0 +1,7 @@
+{
+  "name": "Storage_api",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
