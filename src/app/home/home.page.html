@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Blank
+    <ion-title style="text-align: center;">
+      Login
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,12 +9,26 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+      <ion-title size="large">Registro Usuario</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+      <ion-list>
+        <ion-img style="height:200px; margin-bottom: 20px;" src="https://marketplace.magento.com/media/catalog/product/cache/603f9e977a3dc35468ba3ae89ddfbb29/l/o/login-as-customer-kiwicommerce_1_5_12.png"></ion-img>
+        <ion-item>
+          <ion-input type="text" placeholder="USER" name="usuario" id="usuario"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input  type="password" placeholder="PASSWORD" name="password" id="password"></ion-input>
+        </ion-item>
+        <ion-button  (click)="validar()" color="success" shape="round" expand="block" size="large" fill="outline">
+          Ingresar
+        </ion-button>
+      </ion-list>
+
   </div>
 </ion-content>
+<ion-footer style=" font: oblique bold 75% cursive;text-align: center;">
+  <p>@ Creacion App Universiad politecnica salesiana</p>
+</ion-footer>
