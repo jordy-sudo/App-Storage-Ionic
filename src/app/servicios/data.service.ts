@@ -12,21 +12,21 @@ export class DataService {
 
   constructor(private http: HttpClient, private storage: Storage, private navCtrl: NavController, private alertController: AlertController) {
     storage.create();
-      storage.get('Registros').then((item)=>{
-        console.log(item)
-        if(item){
-          registro=item;
-          console.log(registro)
-        }else{
-          registro=[];
-        }
-        
-      }).catch((e)=>{
-        registro=[];
-      })
-    
-   
- 
+    storage.get('Registros').then((item) => {
+      console.log(item)
+      if (item) {
+        registro = item;
+        console.log(registro)
+      } else {
+        registro = [];
+      }
+
+    }).catch((e) => {
+      registro = [];
+    })
+
+
+
   }
 
   registro_nuevo(user_new, psw_new) {
@@ -40,8 +40,8 @@ export class DataService {
   }
 
   getUser() {
-   // return this.http.get('https://jsonplaceholder.typicode.com/users')
-   return this.http.get('https://my-json-server.typicode.com/AndreaGonzalez14/dataJSONPlataformasMoviles/estudiantes')
+    // return this.http.get('https://jsonplaceholder.typicode.com/users')
+    return this.http.get('https://my-json-server.typicode.com/AndreaGonzalez14/dataJSONPlataformasMoviles/estudiantes')
   }
 
   guardar(registro) {
@@ -58,12 +58,6 @@ export class DataService {
     console.log(this.storage['Registros'])
   }
 
-  pruebas() {
-  }
-
-  mostrar() {
-
-  }
 
   async presentAlertPrompt() {
     const alert = await this.alertController.create({
@@ -99,11 +93,22 @@ export class DataService {
           handler: data => {
             console.log('Confirm Ok');
             console.log(data.Nombre)
-            this.registro_nuevo(data.Nombre, data.Password)
-            Swal.fire({
-              title: 'Registro Exitoso',
-              text: 'Ahora puedes ingresar con tu nuevo usuario',
-              icon: 'success',})
+            
+            if(data.Nombre){
+              this.registro_nuevo(data.Nombre, data.Password)
+              Swal.fire({
+                title: 'Registro Exitoso',
+                text: 'Ahora puedes ingresar con tu nuevo usuario',
+                icon: 'success',
+              })
+            }else{
+              Swal.fire({
+                title: 'Campos vacios',
+                text: 'No se peude ingresar el usuario',
+                icon: 'error',
+              })
+            }
+            
             //this.guardar(data.Nombre,data.Password);
           }
         }
@@ -112,60 +117,66 @@ export class DataService {
 
     await alert.present();
   }
-
+  capturar: any
+  contra: any
   Registro_validar(usuario, psw) {
-    if(registro.length==0){
-      this.presentAlertPrompt();
-    }else{
-      this.storage.forEach( (value, key, index) => {
-        var capturar,contra
-        index=registro.length
-        //console.log(index)
-       for (let i = 0; i< index ;i++){
-           var nombre_registro = value[i].user_new;
-           var contra_registro = value[i].psw_new;
-            if(nombre_registro == usuario && contra_registro == psw){
-              console.log('registro exitoso')
-              capturar=nombre_registro;
-              contra=contra_registro
-            }else{
-              console.log('registro fallido')
-            }
-          }
-          console.log(capturar)
-  
-          if(capturar==usuario && contra==psw){
-            this.navCtrl.navigateForward('/home/principal');
-            console.log('registro exitoso')
-           }else{
-            Swal.fire({
-              title: 'Usuario invalido',
-              text: 'Deseas ingresar un nuevo usuario?',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonText: 'Si',
-              cancelButtonText: 'No'
-            }).then((result) => {
-              if (result.isConfirmed) {
-    
-                this.presentAlertPrompt();
-                
-                
-              } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire(
-                  'Ok',
-                  'Trata con un diferente usuario :)',
-                  'error'
-                )
-              }
-            })
-            console.log("Registro fallido");
-             console.log('err')
-          }
-  
+    if (registro.length == 0) {
+      Swal.fire({
+        title: 'No existen usuarios',
+        text: 'Ingresa un usuario',
+        icon: 'warning',
       })
+      this.presentAlertPrompt();
+    } else {
+      //aqui corte
+      this.storage.forEach((value, key, index) => {
+        index = registro.length
+        //console.log(index)
+        //console.log(value)
+        var sw = false;
+        for (let i = 0; i < index; i++) {
+          if (value[i].user_new == usuario && value[i].user_new) {
+            console.log("Encontro en: " + i);
+            sw = true;
+          }
+        }
+        if (sw == false) {
+          Swal.fire({
+            title: 'No se encontro el Usuario',
+            text: 'Deseas ingresar un nuevo usuario?',
+            icon: 'error',
+            showCancelButton: true,
+                    confirmButtonText: 'Si',
+                    cancelButtonText: 'No'
+          }).then((result) => {
+            if (result.isConfirmed) {
+  
+              this.presentAlertPrompt();
+              
+              
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              Swal.fire(
+                'Ok',
+                'Trata con un diferente usuario :)',
+                'error'
+              )
+            }
+          })
+        } else {
+          Swal.fire({
+            title: 'Registro Exitoso',
+            text: 'Bienvenido: '+usuario,
+            icon: 'success',
+          })
+          this.navCtrl.navigateForward('/home/principal');
+        }
+      })
+
+
+
+
     }
-    
+
 
   }
 

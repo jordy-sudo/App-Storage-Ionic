@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { AlertController, NavController } from '@ionic/angular';
 import { DataService } from '../servicios/data.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-home',
@@ -19,21 +20,32 @@ export class HomePage {
   usuario_: any;
   psw: any;
 
-  constructor(private alertController: AlertController, private navCtrl: NavController,private servicios:DataService) {}
+  constructor(private alertController: AlertController, private navCtrl: NavController, private servicios: DataService) { }
 
-  async ngOnInit(){
-    
+  async ngOnInit() {
+
     //this.servicios.registro_nuevo('admin','1234')
     //this.servicios.pruebas()
-   
+
   }
 
-  validar(){
-    this.usuario=((document.getElementById("usuario") as HTMLInputElement).value);
-    this.psw=((document.getElementById("password") as HTMLInputElement).value); 
-    this.servicios.Registro_validar(this.usuario,this.psw)    
+  validar() {
+    this.usuario = document.getElementById("usuario");
+    console.log(this.usuario.value)
+    this.psw = document.getElementById("password");
+    if (this.usuario.value) {
+      this.servicios.Registro_validar(this.usuario.value, this.psw.value)
+    } else {
+      console.log('no hay parametros')
+      Swal.fire(
+        'Intentalo de nuevo',
+        'Los parametros no deben estar vacios :)',
+        'error'
+      )
+    }
+
   }
 
- 
+
 
 }
